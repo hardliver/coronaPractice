@@ -7,29 +7,51 @@ function scene:create(event)
 
 	local screenGroup = self.view
 
-	local function pressButton( event )
+	local function catchBall( event )
 	    if ( event.phase == "began" ) then
-	        print( "Touch event began on: " )
+        print( "Touch event began on: " )
 	    elseif ( event.phase == "ended" ) then
-	        print( "Touch event ended on: " )
-					composer.gotoScene("page2")
+        print( "Touch event ended on: " )
+				composer.gotoScene("page2")
 	    end
 	    return true
 	end
 
-	local startBtn = display.newRect( 0, 0, _W/2, _H/10 )
+	local catchBallBtn = display.newRect( 0, 0, _W/2, _H/10 )
 	local btnX = _W/2
-	local btnY = (_H/4)*3.5
-	startBtn.x = btnX
-	startBtn.y = btnY
-	startBtn:setFillColor( 1, 1, 1 )
-	screenGroup:insert(startBtn)
-	local startText = display.newText( "START!", btnX, btnY , native.systemFont, _W*1/10 )
+	local btnY = (_H/4)*3
+	catchBallBtn.x = btnX
+	catchBallBtn.y = btnY
+	catchBallBtn:setFillColor( 1, 1, 1 )
+	screenGroup:insert(catchBallBtn)
+	local startText = display.newText( "Catch Ball", btnX, btnY , native.systemFont, _W*1/10 )
 	startText:setFillColor( 0, 0, 0 )
 	screenGroup:insert(startText)
 
-	startBtn:addEventListener( "touch", pressButton )
+	catchBallBtn:addEventListener( "touch", catchBall )
 
+	local function createBall( event )
+	    if ( event.phase == "began" ) then
+        print( "Touch event began on: " )
+	    elseif ( event.phase == "ended" ) then
+        print( "Touch event ended on: " )
+				composer.gotoScene("page3")
+	    end
+	    return true
+	end
+
+	local createBallBtn = display.newRect( 0, 0, _W/2, _H/10 )
+	local btnX = _W/2
+	local btnY = (_H/4)*3.5
+	createBallBtn.x = btnX
+	createBallBtn.y = btnY
+	createBallBtn:setFillColor( 1, 1, 1 )
+	screenGroup:insert(createBallBtn)
+	local startText = display.newText( "Create Ball", btnX, btnY , native.systemFont, _W*1/10 )
+	startText:setFillColor( 0, 0, 0 )
+	screenGroup:insert(startText)
+
+	createBallBtn:addEventListener( "touch", createBall )
 end
 
 function scene:show( event )
