@@ -31,11 +31,13 @@ function scene:create(event)
   screenGroup:insert(scoreBtnText)
 
   ballGroup = {}
-  local function _createBall()
-    r = _W/20
+  local function _createBall(startX, startY)
+    r = _W/50
     local ball = display.newCircle( 0, 0, r )
-    ball.x = math.random()*_W
-  	ball.y = math.random()*_H
+    ball.x = startX
+  	ball.y = startY
+    ball.xspeed=(math.random(1,100)-50)*_W*0.001/10
+    ball.yspeed=(math.random(1,100)-50)*_W*0.001/10
     ball:setFillColor( math.random(), math.random(), math.random() )
     screenGroup:insert(ball)
     table.insert(ballGroup, ball)
@@ -44,19 +46,30 @@ function scene:create(event)
       ball:removeSelf()
       table.remove(ballGroup,1)
     end
-    transition.to( ball, { time=5*1000, alpha=0, y=ball.y+_H*1/10, onComplete=removeBall } )
+    transition.to( ball, { time=5*1000, alpha=0, onComplete=removeBall } )
   end
 
   local function createBall( event )
 	    if ( event.phase == "began" ) then
 	    elseif ( event.phase == "ended" ) then
-        _createBall()
+        local startX=math.random(100)/100*_W
+        local startY=math.random(100)/100*_H
+        for i=1,100 do
+          _createBall(startX, startY)
+        end
 	    end
 	    return true
 	end
   createBallBtn:addEventListener( "touch", createBall )
 
   local function ballCounter( event )
+
+    for i=1,#ballGroup do
+      ballGroup[i].x=ballGroup[i].x+ballGroup[i].xspeed
+      ballGroup[i].y=ballGroup[i].y+ballGroup[i].yspeed
+      ballGroup[i].yspeed=ballGroup[i].yspeed+_W*0.001/10
+    end
+
     score = #ballGroup
     scoreboardText.text = score
     scoreboard:toFront()
@@ -76,7 +89,7 @@ end
 
 function scene:hide( event )
 	if ( event.phase == "did" ) then
-    Runtime:removeEventListener( "enterFrame", planMove )
+    Runtime:removeEventListener( "enterFrame", ballCounter )
 		composer.removeScene( "page2" )
 	end
 end
